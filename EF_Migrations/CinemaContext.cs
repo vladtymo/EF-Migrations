@@ -26,6 +26,7 @@ namespace EF_Migrations
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Actor> Actors { get; set; }
+        public DbSet<Genre> Genres { get; set; }
     }
 
     public class Ticket
@@ -44,6 +45,7 @@ namespace EF_Migrations
         public int Places { get; set; }
         public bool Is3D { get; set; }
         public DateTime Time { get; set; }
+
         [Required]
         public Movie Movie { get; set; }
         public ICollection<Ticket> Tickets { get; set; }
@@ -51,15 +53,30 @@ namespace EF_Migrations
 
     public class Movie
     {
+        public Movie()
+        {
+            Actors = new HashSet<Actor>();
+            Sessions = new HashSet<Session>();
+        }
         public int Id { get; set; }
         [Required, MaxLength(300)]
         public string Title { get; set; }
+        [MaxLength(2000)]
+        public string Description { get; set; }
         public int Year { get; set; }
-        public string Genre { get; set; }
         //public TimeSpan Duration { get; set; }
         public float Rating { get; set; }
+
+        public Genre Genre { get; set; }
         public ICollection<Actor> Actors { get; set; }
         public ICollection<Session> Sessions { get; set; }
+    }
+    public class Genre
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+        public ICollection<Movie> Movies { get; set; }
     }
 
     public class Actor
@@ -70,6 +87,7 @@ namespace EF_Migrations
         [Required, MaxLength(100)]
         public string LastName { get; set; }
         public DateTime Birthdate { get; set; }
+
         public ICollection<Movie> Movies { get; set; }
     }
 }
